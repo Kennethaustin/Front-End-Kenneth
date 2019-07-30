@@ -36,3 +36,33 @@ const style = {
 };
 export default Login;
 
+
+
+
+class Login extends React.Component {
+  state = {
+    email: "",
+    password: ""
+  };
+
+   onChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
+
+   onSubmit = async () => {
+    try {
+      const response = await this.props.mutate({
+        variables: this.state
+      });
+      const { token, refreshToken } = response.data.login;
+      localStorage.setItem("token", token);
+      localStorage.setItem("refreshToken", refreshToken);
+      console.log("login worked!");
+      console.log(jwtDecode(token));
+    } catch (e) {
+      console.log("login failed!");
+      console.log(e);
+    }
+  };
